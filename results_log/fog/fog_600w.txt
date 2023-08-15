@@ -1,0 +1,2 @@
+dataset_input: final_results/fog/fog_cond_600w 
+Overall: PSNR 31.139570 SSIM 0.961850 

@@ -52,6 +52,9 @@
 #OMP_THREADS_NUM=8 CUDA_VISIBLE_DEVICES=0 python eval_diffusion.py --config "all_light_condition.yml" --resume ckpt/snow11k/AllLightCondition_ddpm3360000.pth.tar  --test_set 'real_weather' --image_folder 'final_results/real_weather/real_snow_snow11k_cond_336w/' --sampling_timesteps 25 --grid_r 16 --testing_block 1/2
 #OMP_THREADS_NUM=8 CUDA_VISIBLE_DEVICES=1 python eval_diffusion.py --config "all_light_condition.yml" --resume ckpt/snow11k/AllLightCondition_ddpm3360000.pth.tar  --test_set 'real_weather' --image_folder 'final_results/real_weather/real_snow_snow11k_cond_336w/' --sampling_timesteps 25 --grid_r 16 --testing_block 2/2
 
+#todo
+# CUDA_VISIBLE_DEVICES=1,2 python train_diffusion.py --config "all_light_condition.yml" --training_name=5weather_blur
+
 path:
     lol_v1: ../../data/LOL-v1
     lol_v2_real: ../../data/LOL-v2/Real_captured
@@ -61,6 +64,7 @@ path:
     sid: ../../data/sid_processed
     smid: ../../data/smid
     lol_blur: ../../data/LOL-Blur
+    lol_blur_noise: ../../data/LOL-Blur
     lol_deblur_in_LDR: /home/ysd/cyf20/code/Learning_degradation-main/results/lol_blur
     lol_deblur_in_MIMO: /home/ysd/cyf20/code/MIMO-UNet-main/results/lol_blur_enhance_test_mini_plus
     fog: ../../data/CityscapeFog
@@ -83,7 +87,7 @@ data:
     channels: 3
     num_workers: 32
     data_dir: 
-    data_name: raindrop   # lol_v1,lol_v2_real,lol_v2_syn,sdsd_indoor,sdsd_outdoor # ,sid,smid
+    data_name: lol_blur, fog, raindrop, rain, haze, snow11k   # lol_v1,lol_v2_real,lol_v2_syn,sdsd_indoor,sdsd_outdoor # ,sid,smid
     conditional: True
     ckpt_path: 
     tb_path:
@@ -112,8 +116,8 @@ training:
     batch_size: 12 #snow11k 14
     n_epochs: 1000000 #100000
     n_iters: 400000000 #4000000
-    snapshot_freq: 100000 #500000000 #20000
-    validation_freq: 100000 #50000000 #50000
+    snapshot_freq: 50000 #500000000 #20000
+    validation_freq: 50000 #50000000 #50000
 
 sampling:
     batch_size: 4

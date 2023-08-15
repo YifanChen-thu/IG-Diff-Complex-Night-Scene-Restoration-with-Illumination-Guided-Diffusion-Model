@@ -352,6 +352,47 @@ def lol_blur(config):
         'test_condition_paths': test_condition_paths,
         }
 
+def lol_blur_noise(config):
+    lol_blur_noise_path = config.path.lol_blur_noise
+    train_input_paths = os.path.join(lol_blur_noise_path,'train','low_blur_noise')
+    train_gt_paths = os.path.join(lol_blur_noise_path,'train','high_sharp_scaled')
+    test_input_paths = os.path.join(lol_blur_noise_path,'test','low_blur_noise')
+    test_gt_paths = os.path.join(lol_blur_noise_path,'test','high_sharp_scaled')
+    train_condition_paths = os.path.join(lol_blur_noise_path, 'train', 'low_blur_noise_sci_difficult_illu_correct')
+    # print(train_condition_paths)
+    test_condition_paths = os.path.join(lol_blur_path, 'test', 'low_blur_noise_sci_difficult_illu_correct')
+
+    train_input_folders = util.glob_file_list(train_input_paths)  #文件夹列出来
+    train_gt_folders = util.glob_file_list(train_gt_paths)
+
+    train_input_paths,train_gt_paths = get_images_from_folders(train_input_folders, train_gt_folders, if_extend=False)
+
+
+    test_input_folders = util.glob_file_list(test_input_paths)
+    test_gt_folders = util.glob_file_list(test_gt_paths)
+
+
+    test_input_paths,test_gt_paths = get_images_from_folders(test_input_folders, test_gt_folders, if_extend=False)
+
+
+    
+    
+    
+    train_condition_paths = glob_path(train_condition_paths)  #图片列出来
+    test_condition_paths = glob_path(test_condition_paths)
+    
+
+    # check_path(train_input_paths, train_gt_paths)
+    # check_path(test_input_paths, test_gt_paths)
+
+    return {'train_input_paths':train_input_paths,
+        'train_gt_paths':train_gt_paths,
+        'test_input_paths':test_input_paths,
+        'test_gt_paths':test_gt_paths,
+        'train_condition_paths': train_condition_paths,
+        'test_condition_paths': test_condition_paths,
+        }
+
 def lol_deblur_in_LDR(config):
     lol_blur_path = config.path.lol_blur
     train_input_paths = os.path.join(lol_blur_path,'train','low_blur')
