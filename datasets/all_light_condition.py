@@ -358,9 +358,8 @@ def lol_blur_noise(config):
     train_gt_paths = os.path.join(lol_blur_noise_path,'train','high_sharp_scaled')
     test_input_paths = os.path.join(lol_blur_noise_path,'test','low_blur_noise')
     test_gt_paths = os.path.join(lol_blur_noise_path,'test','high_sharp_scaled')
-    train_condition_paths = os.path.join(lol_blur_noise_path, 'train', 'low_blur_noise_sci_difficult_illu_correct')
-    # print(train_condition_paths)
-    test_condition_paths = os.path.join(lol_blur_path, 'test', 'low_blur_noise_sci_difficult_illu_correct')
+    train_condition_paths = os.path.join(lol_blur_noise_path, 'train', 'lol_blur_noise_sci_difficult_illu_correct')
+    test_condition_paths = os.path.join(lol_blur_noise_path, 'test', 'lol_blur_noise_sci_difficult_illu_correct')
 
     train_input_folders = util.glob_file_list(train_input_paths)  #文件夹列出来
     train_gt_folders = util.glob_file_list(train_gt_paths)
@@ -524,6 +523,35 @@ def raindrop(config):
     test_gt_paths = os.path.join(raindrop_path,'test','gt')
     train_condition_paths = os.path.join(raindrop_path, 'train', 'sci_difficult_illu_correct')
     test_condition_paths = os.path.join(raindrop_path, 'test', 'sci_difficult_illu_correct')
+
+    train_input_paths = glob_path(train_input_paths)
+    train_gt_paths = glob_path(train_gt_paths)
+    test_input_paths = glob_path(test_input_paths)
+    test_gt_paths = glob_path(test_gt_paths)
+    train_condition_paths = glob_path(train_condition_paths)
+    test_condition_paths = glob_path(test_condition_paths)
+
+    # check_path(train_input_paths, train_gt_paths)
+    # check_path(test_input_paths, test_gt_paths)
+
+    return {'train_input_paths':train_input_paths,
+        'train_gt_paths':train_gt_paths,
+        'test_input_paths':test_input_paths,
+        'test_gt_paths':test_gt_paths,
+        'train_condition_paths': train_condition_paths,
+        'test_condition_paths': test_condition_paths,
+        }
+def raindrop_snow(config):
+    # import pdb;pdb.set_trace()
+    raindrop_path = config.path.raindrop
+    raindrop_snow_path = config.path.raindrop_snow
+
+    train_input_paths = os.path.join(raindrop_snow_path,'train','input_smallsnow')
+    train_gt_paths = os.path.join(raindrop_path,'train','gt')
+    test_input_paths = os.path.join(raindrop_snow_path,'test','input_smallsnow')
+    test_gt_paths = os.path.join(raindrop_path,'test','gt')
+    train_condition_paths = os.path.join(raindrop_snow_path, 'train', 'snowS_sci_difficult_illu_correct')
+    test_condition_paths = os.path.join(raindrop_snow_path, 'test', 'snowS_sci_difficult_illu_correct')
 
     train_input_paths = glob_path(train_input_paths)
     train_gt_paths = glob_path(train_gt_paths)
