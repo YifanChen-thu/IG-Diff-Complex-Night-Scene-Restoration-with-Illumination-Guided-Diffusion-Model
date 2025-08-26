@@ -53,10 +53,14 @@
 #OMP_THREADS_NUM=8 CUDA_VISIBLE_DEVICES=1 python eval_diffusion.py --config "all_light_condition.yml" --resume ckpt/snow11k/AllLightCondition_ddpm3360000.pth.tar  --test_set 'real_weather' --image_folder 'final_results/real_weather/real_snow_snow11k_cond_336w/' --sampling_timesteps 25 --grid_r 16 --testing_block 2/2
 
 
+
 # CUDA_VISIBLE_DEVICES=0,1,2,3 python train_diffusion.py --config "all_light_condition.yml" --training_name=lol_blur_noise
 
-# CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 python train_diffusion.py --config "all_light_condition.yml" --training_name=lol_blur
+# CUDA_VISIBLE_DEVICES=0,1,2,3 python train_diffusion.py --config "all_light_condition.yml" --training_name=lol_blur
 # CUDA_VISIBLE_DEVICES=4,5,6,7 python train_diffusion.py --config "all_light_condition.yml" --training_name=raindrop_snow
+
+# OMP_THREADS_NUM=8 CUDA_VISIBLE_DEVICES=0 python eval_diffusion.py --config "all_light_condition.yml" --resume ckpt/lol_blur_noise/AllLightCondition_ddpm350000.pth.tar  --test_set 'lol_blur_noise' --image_folder 'final_results/lol_blur_noise/lol_blur_noise_cond_35w/' --sampling_timesteps 25 --grid_r 16
+# OMP_THREADS_NUM=8 CUDA_VISIBLE_DEVICES=1 python eval_diffusion.py --config "all_light_condition.yml" --resume ckpt/lol_blur_noise/AllLightCondition_ddpm450000.pth.tar  --test_set 'lol_blur_noise' --image_folder 'final_results/lol_blur_noise/lol_blur_noise_cond_45w/' --sampling_timesteps 25 --grid_r 16
 
 path:
     lol_v1: ../../data/LOL-v1
@@ -77,7 +81,8 @@ path:
     snow: ../../data/CityscapeSnow
     haze: ../../data/Haze4K
     snow11k: ../../data/snow11k
-    real_weather: ../../data/real_weather/real_snow
+    real_weather: 
+    real_weather_sci:
 
 
 test_dir:
@@ -91,7 +96,7 @@ data:
     channels: 3
     num_workers: 32
     data_dir: 
-    data_name: raindrop_snow   # lol_v1,lol_v2_real,lol_v2_syn,sdsd_indoor,sdsd_outdoor # ,sid,smid
+    data_name: lol_blur_noise   # lol_v1,lol_v2_real,lol_v2_syn,sdsd_indoor,sdsd_outdoor # ,sid,smid
     conditional: True
     ckpt_path: 
     tb_path:
@@ -117,7 +122,7 @@ diffusion:
 
 training:
     patch_n: 4 #16 #4
-    batch_size: 60 #24 #36 #12 #snow11k 14
+    batch_size: 48 #24 #36 #12 #snow11k 14
     n_epochs: 1000000 #100000
     n_iters: 400000000 #4000000
     snapshot_freq: 50000 #500000000 #20000
@@ -133,6 +138,6 @@ testing:
 optim:
     weight_decay: 0.000
     optimizer: "Adam"
-    lr: 0.00004 #0.00002     #4*12 2e-5    #16*36  6e-5      batchsize越大 lr越大
+    lr: 0.00004 #0.00002     #4*12 2e-5    #16*36  6e-5      batchsize越大 lr越大   (lol-blur-noise-4gpu 4090ti)4*60 4e-5  (raindrop_snow-3gpu 4090ti)4*48 4e-5
     amsgrad: False
     eps: 0.00000001

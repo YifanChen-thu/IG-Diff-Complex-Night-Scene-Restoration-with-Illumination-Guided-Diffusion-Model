@@ -56,14 +56,14 @@ from utils.metrics import calculate_psnr, calculate_ssim
 #     'final_results/snow/snow_cond_490w'
 # ]
 # snow11k
-mode = 'snow11k'
-gt_root = '../../data/snow11k/test/gt/'
-results_root_list = [
-    # 'final_results/snow/snow_cond_134w'
-    # 'final_results/snow11k/snow11k_cond_38w',
-    # 'final_results/snow11k/snow11k_cond_68w',
-    'final_results/snow11k/snow11k_cond_92w'
-]
+# mode = 'snow11k'
+# gt_root = '../../data/snow11k/test/gt/'
+# results_root_list = [
+#     # 'final_results/snow/snow_cond_134w'
+#     # 'final_results/snow11k/snow11k_cond_38w',
+#     # 'final_results/snow11k/snow11k_cond_68w',
+#     'final_results/snow11k/snow11k_cond_92w'
+# ]
 
 # # haze
 # mode = 'haze'
@@ -72,23 +72,35 @@ results_root_list = [
 #     'final_results/haze/haze_cond_100w',
 #     'final_results/haze/haze_cond_202w'
 # ]
+#MIRNet
+method = 'MIRNet'
+
+
 # fog
 # mode = 'fog'
 # gt_root = '../../data/CityscapeFog/test/gt/'
-# results_root_list = [
-#     # 'final_results/fog/fog_cond_114w',
-#     # 'final_results/fog/fog_cond_132w',
-#     # 'final_results/fog/fog_cond_414w',
-#     # 'final_results/fog/fog_cond_424w',
-#     'final_results/fog/fog_cond_600w'
-# ]
+mode = 'raindrop'
+gt_root = '../../data/Raindrop/test/gt/'
+
+
+
+results_root_list = [
+    f'../MIRNet-alllight/results/{mode}/epoch4'
+    # 'final_results/fog/fog_cond_114w',
+    # 'final_results/fog/fog_cond_132w',
+    # 'final_results/fog/fog_cond_414w',
+    # 'final_results/fog/fog_cond_424w',
+    # 'final_results/fog/fog_cond_600w'
+]
+log_file_name = f'../MIRNet-alllight/test_results_metrics/{mode}.txt'
 #lol_blur
 
 #snow11k
-
-
+# CUDA_VISIBLE_DEVICES=6 python calculate_psnr_ssim.py
 
 def name_mapper(gt_name, mode):
+    
+    
     if mode == 'lol_v2_real':
         img_name = gt_name.replace('normal', 'low') + '_output.png'
     elif mode == 'lol_blur':
@@ -117,7 +129,10 @@ for results_root in results_root_list:
     # print(imgsName,gtsName)
 
     # print(f'len(imgsName):{len(imgsName)},len(gtsName):{len(gtsName)}')
-    assert len(imgsName) == len(gtsName), f'len(imgsName):{len(imgsName)},len(gtsName):{len(gtsName)}'
+    if method in ['MIRNet']:
+        assert len(imgsName)/2 == len(gtsName), f'len(imgsName):{len(imgsName)},len(gtsName):{len(gtsName)}'
+    else:
+        assert len(imgsName) == len(gtsName), f'len(imgsName):{len(imgsName)},len(gtsName):{len(gtsName)}'
 
     cumulative_psnr, cumulative_ssim = 0, 0
     for i in range(len(gtsName)):
@@ -148,11 +163,10 @@ for results_root in results_root_list:
     val_ssim = cumulative_ssim / len(imgsName)
     print('Testing set, PSNR is %.4f and SSIM is %.4f' % (val_psnr, val_ssim))
     iters_num = results_root.split('_')[-1]
-    log_file_name = os.path.join('results_log', mode, f'{mode}_{iters_num}.txt')
-    if os.path.exists('results_log') == False:
-        os.mkdir('results_log')
-    if os.path.exists(os.path.join('results_log', mode)) == False:
-        os.mkdir(os.path.join('results_log', mode)) 
+
+    # log_file_name = os.path.join('results_log', mode, f'{mode}_{iters_num}.txt')
+    os.makedirs(os.path.dirname(log_file_name), exist_ok=True)
+
 
     with open(log_file_name, 'a') as f:
         f.write(f"dataset_input: {results_root} \n")

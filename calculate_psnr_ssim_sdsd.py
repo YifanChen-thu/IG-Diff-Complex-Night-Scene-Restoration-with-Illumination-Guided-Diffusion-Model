@@ -52,7 +52,9 @@ _, val_loader = DATASET.get_loaders(parse_patches=False, validation=test_set)
 # results_root = 'final_results/lol_blur/lol_blur_cond_240w'   
 # results_root = 'final_results/sdsd_indoor/sdsd_indoor_cond_145w'
 results_root_list = [
-'final_results/lol_blur/lol_blur_cond_240w'
+    'final_results/lol_blur_noise/lol_blur_noise_cond_35w',
+    'final_results/lol_blur_noise/lol_blur_noise_cond_45w'
+# 'final_results/lol_blur/lol_blur_cond_240w'
 # 'final_results/lol_blur/lol_blur_cond_300w',
 # 'final_results/lol_blur/lol_blur_cond_144w',
 # 'final_results/lol_blur/lol_blur_cond_372w',

@@ -25,6 +25,8 @@ def parse_args_and_config():
                         help="Number of implicit sampling steps")
     parser.add_argument("--test_set", type=str, default='raindrop',
                         help="restoration test set options: ['raindrop', 'snow', 'rainfog']")
+    parser.add_argument("--test_input_path", type=str, default='raindrop')
+    parser.add_argument("--test_input_sci_path", type=str, default='raindrop')
     parser.add_argument("--testing_block", type=str, default=None)
     parser.add_argument("--image_folder", default='results/images/', type=str,
                         help="Location to save restored images")
@@ -37,6 +39,9 @@ def parse_args_and_config():
     new_config = dict2namespace(config)
 
     new_config.data.data_name = args.test_set
+    new_config.path.real_weather = args.test_input_path
+    new_config.path.real_weather_sci = args.test_input_sci_path
+
     if args.testing_block is not None:
         new_config.data.testing_block = args.testing_block
     return args, new_config

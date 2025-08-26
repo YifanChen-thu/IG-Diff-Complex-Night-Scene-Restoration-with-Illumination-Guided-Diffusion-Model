@@ -77,10 +77,10 @@ def divide_train_test(test_dir, subfolders_input, subfolders_gt, condition_root,
 
 
 def glob_path(path):
-    return sorted(glob.glob(f'{path}/*.png')+glob.glob(f'{path}/*.jpg'))
+    return sorted(glob.glob(f'{path}/*.png')+glob.glob(f'{path}/*.jpg')+glob.glob(f'{path}/*.jpeg'))
 
 def glob_path2(path):
-    return sorted(glob.glob(f'{path}/*.jpg')+glob.glob(f'{path}/*.png'))
+    return sorted(glob.glob(f'{path}/*.png')+glob.glob(f'{path}/*.jpg')+glob.glob(f'{path}/*.jpeg'))
 
 def check_path(train_input_paths, train_gt_paths):
     for (input, gt) in zip(train_input_paths, train_gt_paths):
@@ -692,11 +692,11 @@ def haze(config):
 
 def real_weather(config):
     # import pdb;pdb.set_trace()
-    real_weather_path = config.path.real_weather
-
+    test_input_paths = config.path.real_weather
+    test_condition_paths = config.path.real_weather_sci
     # train_input_paths = os.path.join(real_weather_path,'train','input')
     # train_gt_paths = os.path.join(real_weather_path,'train','gt')
-    test_input_paths = os.path.join(real_weather_path,'test','input')
+    # test_input_paths = os.path.join(real_weather_path,'test','input')
     # test_gt_paths = os.path.join(real_weather_path,'test','gt')
     
     # train_input_paths = glob_path(train_input_paths)
@@ -704,7 +704,7 @@ def real_weather(config):
     test_input_paths = glob_path(test_input_paths)
     # test_gt_paths = glob_path(test_gt_paths)
 
-    test_condition_paths = os.path.join(real_weather_path, 'test', 'sci_difficult_illu_correct')
+    # test_condition_paths = os.path.join(real_weather_path, 'test', 'sci_difficult_illu_correct')
     test_condition_paths = glob_path(test_condition_paths)
 
     return {'train_input_paths':test_input_paths,
