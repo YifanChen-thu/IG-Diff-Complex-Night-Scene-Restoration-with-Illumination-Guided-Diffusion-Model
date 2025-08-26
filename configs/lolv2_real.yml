@@ -1,0 +1,57 @@
+# python train_diffusion.py --config "lolv2_syn.yml" --resume 'ckpt/WeatherDiff64.pth.tar' --image_folder='results/lol2syn'
+# python train_diffusion.py --config "lolv2_real.yml" --resume 'ckpt/WeatherDiff64.pth.tar' --image_folder='results/lol2real'
+
+# CUDA_VISIBLE_DEVICES=0 python eval_diffusion.py --config "lolv2_real.yml" \
+#  --resume 'ckpt/lolv2_real/LOLv2_real_ddpm_2070000.pth.tar' --test_set 'lolv2_real' \
+#  --image_folder 'results/lol2real_test/' --sampling_timesteps 25 --grid_r 16
+
+# CUDA_VISIBLE_DEVICES=0 python eval_diffusion.py --config "lolv2_real.yml" \
+#  --resume 'ckpt/lolv2_real/LOLv2_real_ddpm_2070000.pth.tar' --test_set 'lolv2_real' \
+#  --image_folder 'results/lol2real_test_clip_inference/' --sampling_timesteps 25 --grid_r 16
+
+data:
+    dataset: "LOLv2_real"
+    image_size: 64
+    channels: 3
+    num_workers: 32
+    data_dir: "/home/cyf20/datasets/LOL-v2/Real_captured"
+    conditional: True
+    ckpt_path: "./ckpt/lolv2_real"
+    
+model:
+    in_channels: 3
+    out_ch: 3
+    ch: 128
+    ch_mult: [1, 2, 3, 4]
+    num_res_blocks: 2
+    attn_resolutions: [16, ]
+    dropout: 0.0
+    ema_rate: 0.999
+    ema: True
+    resamp_with_conv: True
+
+diffusion:
+    beta_schedule: linear
+    beta_start: 0.0001
+    beta_end: 0.02
+    num_diffusion_timesteps: 1000
+
+training:
+    patch_n: 16
+    batch_size: 16
+    n_epochs: 6000
+    n_iters: 6000000
+    snapshot_freq: 10000
+    validation_freq: 10000
+
+sampling:
+    batch_size: 4
+    last_only: True
+
+optim:
+    weight_decay: 0.000
+    optimizer: "Adam"
+    lr: 0.00002
+    amsgrad: False
+    eps: 0.00000001
+

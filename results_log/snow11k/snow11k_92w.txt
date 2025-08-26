@@ -1,0 +1,8 @@
+dataset_input: final_results/snow11k/snow11k_cond_38w 
+Overall: PSNR 26.063873 SSIM 0.929482 
+dataset_input: final_results/snow11k/snow11k_cond_68w 
+Overall: PSNR 27.123950 SSIM 0.936021 
+dataset_input: final_results/snow11k/snow11k_cond_92w 
+Overall: PSNR 27.495598 SSIM 0.938375 
+dataset_input: final_results/snow11k/snow11k_cond_92w 
+Overall: PSNR 27.495598 SSIM 0.938375 

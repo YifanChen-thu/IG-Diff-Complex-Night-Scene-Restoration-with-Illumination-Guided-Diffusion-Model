@@ -1,0 +1,4 @@
+dataset_input: final_results/fog/fog_cond_424w 
+Overall: PSNR 31.020033 SSIM 0.961490 
+dataset_input: final_results/fog/fog_cond_484w 
+Overall: PSNR 31.132638 SSIM 0.961855 

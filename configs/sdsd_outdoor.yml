@@ -1,0 +1,54 @@
+# python train_diffusion.py --config "sdsd_outdoor.yml" --image_folder='results/sdsd_outdoor' --resume 'ckpt/WeatherDiff64.pth.tar' 
+
+# CUDA_VISIBLE_DEVICES=0 python eval_diffusion.py --config "sdsd_outdoor.yml" \
+#  --resume 'ckpt/sdsd_outdoor_ddpm_360000.pth.tar' --test_set 'sdsd_outdoor' \
+#  --image_folder 'results/sdsd_outdoor_test' --sampling_timesteps 25 --grid_r 16
+
+data:
+    dataset: "sdsd_outdoor"
+    image_size: 64
+    channels: 3
+    num_workers: 32
+    data_dir: "/home/cyf20/datasets/SDSD/outdoor_static_np"
+    #
+    testing_dir: MVI_0898,MVI_0928,MVI_0906,MVI_0975,MVI_1001,MVI_0997,MVI_1003,MVI_1026,MVI_1030,MVI_1032
+    conditional: True
+    ckpt_path: "ckpt/sdsd_outdoor"
+    
+model:
+    in_channels: 3
+    out_ch: 3
+    ch: 128
+    ch_mult: [1, 2, 3, 4]
+    num_res_blocks: 2
+    attn_resolutions: [16, ]
+    dropout: 0.0
+    ema_rate: 0.999
+    ema: True
+    resamp_with_conv: True
+
+diffusion:
+    beta_schedule: linear
+    beta_start: 0.0001
+    beta_end: 0.02
+    num_diffusion_timesteps: 1000
+
+training:
+    patch_n: 16
+    batch_size: 16
+    n_epochs: 1775
+    n_iters: 2000000
+    snapshot_freq: 10000
+    validation_freq: 10000
+
+sampling:
+    batch_size: 4
+    last_only: True
+
+optim:
+    weight_decay: 0.000
+    optimizer: "Adam"
+    lr: 0.00002
+    amsgrad: False
+    eps: 0.00000001
+

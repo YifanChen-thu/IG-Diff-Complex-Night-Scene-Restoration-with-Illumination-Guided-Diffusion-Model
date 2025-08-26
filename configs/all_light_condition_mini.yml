@@ -1,0 +1,76 @@
+# CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 python train_diffusion.py --config "all_light_condition_mini.yml" --training_name=lol_v1_lol_v2_sdsd_cond_mini_36m --resume 
+
+
+#3.31 22:00
+# CUDA_VISIBLE_DEVICES=0 python eval_diffusion.py --config "all_light_condition_mini.yml" --resume ckpt/lol_v1_lol_v2_sdsd_cond_mini/AllLightCondition_last.pth.tar  --test_set 'lol_deblur_in_MIMO' --image_folder 'final_results/lol_deblur_in_MIMO/lol_deblur_in_MIMO_cond_mini_222w/' --sampling_timesteps 25 --grid_r 16 
+
+
+path:
+    lol_v1: ../../data/LOL-v1
+    lol_v2_real: ../../data/LOL-v2/Real_captured
+    lol_v2_syn: ../../data/LOL-v2/Synthetic
+    sdsd_indoor: ../../data/SDSD/indoor_static_np
+    sdsd_outdoor: ../../data/SDSD/outdoor_static_np
+    sid: ../../data/sid_processed
+    smid: ../../data/smid
+    lol_blur: ../../data/LOL-Blur
+    lol_deblur_in_LDR: /home/ysd/cyf20/code/Learning_degradation-main/results/lol_blur
+    lol_deblur_in_MIMO: /home/ysd/cyf20/code/MIMO-UNet-main/results/lol_blur_mini_low_deblur_plus
+    
+
+test_dir:
+    sdsd_indoor: pair11,pair21,pair1,pair19,pair4,pair9
+    sdsd_outdoor: MVI_0898,MVI_0928,MVI_0906,MVI_0975,MVI_1001,MVI_0997,MVI_1003,MVI_1026,MVI_1030,MVI_1032
+    smid: configs/test_list.txt
+
+data:
+    dataset: "AllLightCondition"
+    image_size: 64
+    channels: 3
+    num_workers: 32
+    data_dir: 
+    data_name: lol_blur # lol_v1,lol_v2_real,lol_v2_syn,sdsd_indoor,sdsd_outdoor # ,sid,smid
+    conditional: True
+    ckpt_path: 
+    tb_path:
+    testing_block:
+
+model:
+    in_channels: 3
+    out_ch: 3
+    ch: 128
+    ch_mult: [1, 1, 2, 2]
+    num_res_blocks: 2
+    attn_resolutions: [16, ]
+    dropout: 0.0
+    ema_rate: 0.999
+    ema: True
+    resamp_with_conv: True
+
+diffusion:
+    beta_schedule: linear
+    beta_start: 0.0001
+    beta_end: 0.02
+    num_diffusion_timesteps: 1000
+
+training:
+    patch_n: 4
+    batch_size: 16
+    n_epochs: 100000
+    n_iters: 4000000
+    snapshot_freq: 20000
+    validation_freq: 20000
+
+sampling:
+    batch_size: 4
+    last_only: True
+
+testing:
+    batch_size: 4
+
+optim:
+    weight_decay: 0.000
+    optimizer: "Adam"
+    lr: 0.00002
+    amsgrad: False
+    eps: 0.00000001

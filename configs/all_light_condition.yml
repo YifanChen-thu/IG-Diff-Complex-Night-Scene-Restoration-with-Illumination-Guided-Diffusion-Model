@@ -1,0 +1,130 @@
+
+# CUDA_VISIBLE_DEVICES=4 python train_diffusion.py --config "all_light_condition.yml" --training_name=snow11k --resume ckpt/snow11k/AllLightCondition_last.pth.tar
+#6.3
+# CUDA_VISIBLE_DEVICES=0 python train_diffusion.py --config "all_light_condition.yml" --training_name=fog --resume ckpt/fog/AllLightCondition_last.pth.tar
+# CUDA_VISIBLE_DEVICES=1 python train_diffusion.py --config "all_light_condition.yml" --training_name=raindrop --resume ckpt/raindrop/AllLightCondition_last.pth.tar
+# CUDA_VISIBLE_DEVICES=2 python train_diffusion.py --config "all_light_condition.yml" --training_name=rain 
+# CUDA_VISIBLE_DEVICES=3 python train_diffusion.py --config "all_light_condition.yml" --training_name=snow --resume ckpt/snow/AllLightCondition_last.pth.tar
+
+# CUDA_VISIBLE_DEVICES=0 python train_diffusion.py --config "all_light_condition.yml" --training_name=haze 
+# CUDA_VISIBLE_DEVICES=1 python train_diffusion.py --config "all_light_condition.yml" --training_name=rain 
+
+# CUDA_VISIBLE_DEVICES=5 python train_diffusion.py --config "all_light_condition.yml" --training_name=raindrop 
+# CUDA_VISIBLE_DEVICES=6 python train_diffusion.py --config "all_light_condition.yml" --training_name=fog
+
+#OMP_THREADS_NUM=8 CUDA_VISIBLE_DEVICES=4 python eval_diffusion.py --config "all_light_condition.yml" --resume ckpt/raindrop/AllLightCondition_ddpm4700000.pth.tar  --test_set 'raindrop' --image_folder 'final_results/raindrop/raindrop_cond_470w/' --sampling_timesteps 25 --grid_r 16 --testing_block 1/3
+#OMP_THREADS_NUM=8 CUDA_VISIBLE_DEVICES=9 python eval_diffusion.py --config "all_light_condition.yml" --resume ckpt/snow11k/AllLightCondition_ddpm2000000.pth.tar  --test_set 'snow11k' --image_folder 'final_results/snow11k/snow11k_cond_200w/' --sampling_timesteps 25 --grid_r 16 --testing_block 2/3
+#OMP_THREADS_NUM=8 CUDA_VISIBLE_DEVICES=9 python eval_diffusion.py --config "all_light_condition.yml" --resume ckpt/snow11k/AllLightCondition_ddpm2000000.pth.tar  --test_set 'snow11k' --image_folder 'final_results/snow11k/snow11k_cond_200w/' --sampling_timesteps 25 --grid_r 16 --testing_block 3/3
+
+#OMP_THREADS_NUM=8 CUDA_VISIBLE_DEVICES=9 python eval_diffusion.py --config "all_light_condition.yml" --resume ckpt/snow11k/AllLightCondition_ddpm3360000.pth.tar  --test_set 'snow11k' --image_folder 'final_results/snow11k/snow11k_cond_336w/' --sampling_timesteps 25 --grid_r 16 --testing_block 1/3
+#OMP_THREADS_NUM=8 CUDA_VISIBLE_DEVICES=9 python eval_diffusion.py --config "all_light_condition.yml" --resume ckpt/snow11k/AllLightCondition_ddpm3360000.pth.tar  --test_set 'snow11k' --image_folder 'final_results/snow11k/snow11k_cond_336w/' --sampling_timesteps 25 --grid_r 16 --testing_block 2/3
+#OMP_THREADS_NUM=8 CUDA_VISIBLE_DEVICES=9 python eval_diffusion.py --config "all_light_condition.yml" --resume ckpt/snow11k/AllLightCondition_ddpm3360000.pth.tar  --test_set 'snow11k' --image_folder 'final_results/snow11k/snow11k_cond_336w/' --sampling_timesteps 25 --grid_r 16 --testing_block 3/3
+
+#OMP_THREADS_NUM=8 CUDA_VISIBLE_DEVICES=0 python eval_diffusion.py --config "all_light_condition.yml" --resume ckpt/raindrop/AllLightCondition_ddpm4700000.pth.tar  --test_set 'raindrop' --image_folder 'final_results/raindrop/raindrop_cond_470w/' --sampling_timesteps 25 --grid_r 16 --testing_block 1/2
+#OMP_THREADS_NUM=8 CUDA_VISIBLE_DEVICES=1 python eval_diffusion.py --config "all_light_condition.yml" --resume ckpt/raindrop/AllLightCondition_ddpm4700000.pth.tar  --test_set 'raindrop' --image_folder 'final_results/raindrop/raindrop_cond_470w/' --sampling_timesteps 25 --grid_r 16 --testing_block 2/2
+
+#OMP_THREADS_NUM=8 CUDA_VISIBLE_DEVICES=0 python eval_diffusion.py --config "all_light_condition.yml" --resume ckpt/lol_blur_cond/AllLightCondition_ddpm2400000.pth.tar  --test_set 'lol_blur' --image_folder 'final_results/lol_blur/lol_blur_cond_240w/' --sampling_timesteps 25 --grid_r 16 --testing_block 8/9
+#OMP_THREADS_NUM=8 CUDA_VISIBLE_DEVICES=1 python eval_diffusion.py --config "all_light_condition.yml" --resume ckpt/lol_blur_cond/AllLightCondition_ddpm2400000.pth.tar  --test_set 'lol_blur' --image_folder 'final_results/lol_blur/lol_blur_cond_240w/' --sampling_timesteps 25 --grid_r 16 --testing_block 9/9
+
+#OMP_THREADS_NUM=8 CUDA_VISIBLE_DEVICES=3 python eval_diffusion.py --config "all_light_condition.yml" --resume ckpt/lol_blur_cond/AllLightCondition_ddpm2600000.pth.tar  --test_set 'lol_blur' --image_folder 'final_results/lol_blur/lol_blur_cond_260w/' --sampling_timesteps 25 --grid_r 16 --testing_block 6/7
+#OMP_THREADS_NUM=8 CUDA_VISIBLE_DEVICES=5 python eval_diffusion.py --config "all_light_condition.yml" --resume ckpt/lol_blur_cond/AllLightCondition_ddpm2600000.pth.tar  --test_set 'lol_blur' --image_folder 'final_results/lol_blur/lol_blur_cond_260w/' --sampling_timesteps 25 --grid_r 16 --testing_block 7/7
+
+
+#OMP_THREADS_NUM=8 CUDA_VISIBLE_DEVICES=0 python eval_diffusion.py --config "all_light_condition.yml" --resume ckpt/lol_blur_cond/AllLightCondition_ddpm3000000.pth.tar  --test_set 'lol_blur' --image_folder 'final_results/lol_blur/lol_blur_cond_300w/' --sampling_timesteps 25 --grid_r 16 --testing_block 1/4
+#OMP_THREADS_NUM=8 CUDA_VISIBLE_DEVICES=1 python eval_diffusion.py --config "all_light_condition.yml" --resume ckpt/lol_blur_cond/AllLightCondition_ddpm3000000.pth.tar  --test_set 'lol_blur' --image_folder 'final_results/lol_blur/lol_blur_cond_300w/' --sampling_timesteps 25 --grid_r 16 --testing_block 2/4
+#OMP_THREADS_NUM=8 CUDA_VISIBLE_DEVICES=3 python eval_diffusion.py --config "all_light_condition.yml" --resume ckpt/lol_blur_cond/AllLightCondition_ddpm3000000.pth.tar  --test_set lol_blur --image_folder final_results/lol_blur/lol_blur_cond_300w/ --sampling_timesteps 25 --grid_r 16 --testing_block 3/4
+#OMP_THREADS_NUM=8 CUDA_VISIBLE_DEVICES=5 python eval_diffusion.py --config "all_light_condition.yml" --resume ckpt/lol_blur_cond/AllLightCondition_ddpm3000000.pth.tar  --test_set lol_blur --image_folder final_results/lol_blur/lol_blur_cond_300w/ --sampling_timesteps 25 --grid_r 16 --testing_block 4/4
+
+#OMP_THREADS_NUM=8 CUDA_VISIBLE_DEVICES=2 python eval_diffusion.py --config "all_light_condition.yml" --resume ckpt/lol_blur_cond/AllLightCondition_ddpm3720000.pth.tar  --test_set 'lol_blur' --image_folder 'final_results/lol_blur/lol_blur_cond_372w/' --sampling_timesteps 25 --grid_r 16 --testing_block 1/4
+#OMP_THREADS_NUM=8 CUDA_VISIBLE_DEVICES=4 python eval_diffusion.py --config "all_light_condition.yml" --resume ckpt/lol_blur_cond/AllLightCondition_ddpm3720000.pth.tar  --test_set 'lol_blur' --image_folder 'final_results/lol_blur/lol_blur_cond_372w/' --sampling_timesteps 25 --grid_r 16 --testing_block 2/4
+#OMP_THREADS_NUM=8 CUDA_VISIBLE_DEVICES=6 python eval_diffusion.py --config "all_light_condition.yml" --resume ckpt/lol_blur_cond/AllLightCondition_ddpm3720000.pth.tar  --test_set lol_blur --image_folder final_results/lol_blur/lol_blur_cond_372w/ --sampling_timesteps 25 --grid_r 16 --testing_block 3/4
+#OMP_THREADS_NUM=8 CUDA_VISIBLE_DEVICES=7 python eval_diffusion.py --config "all_light_condition.yml" --resume ckpt/lol_blur_cond/AllLightCondition_ddpm3720000.pth.tar  --test_set lol_blur --image_folder final_results/lol_blur/lol_blur_cond_372w/ --sampling_timesteps 25 --grid_r 16 --testing_block 4/4
+
+#OMP_THREADS_NUM=8 CUDA_VISIBLE_DEVICES=3 python eval_diffusion.py --config "all_light_condition.yml" --resume ckpt/fog/AllLightCondition_ddpm6000000.pth.tar  --test_set 'fog' --image_folder 'final_results/fog/fog_cond_600w/' --sampling_timesteps 25 --grid_r 16  --testing_block 1/6
+#OMP_THREADS_NUM=8 CUDA_VISIBLE_DEVICES=4 python eval_diffusion.py --config "all_light_condition.yml" --resume ckpt/fog/AllLightCondition_ddpm6000000.pth.tar  --test_set 'fog' --image_folder 'final_results/fog/fog_cond_600w/' --sampling_timesteps 25 --grid_r 16  --testing_block 2/6
+#OMP_THREADS_NUM=8 CUDA_VISIBLE_DEVICES=6 python eval_diffusion.py --config "all_light_condition.yml" --resume ckpt/fog/AllLightCondition_ddpm6000000.pth.tar  --test_set 'fog' --image_folder 'final_results/fog/fog_cond_600w/' --sampling_timesteps 25 --grid_r 16  --testing_block 3/6
+#OMP_THREADS_NUM=8 CUDA_VISIBLE_DEVICES=5 python eval_diffusion.py --config "all_light_condition.yml" --resume ckpt/fog/AllLightCondition_ddpm6000000.pth.tar  --test_set 'fog' --image_folder 'final_results/fog/fog_cond_600w/' --sampling_timesteps 25 --grid_r 16  --testing_block 4/6
+#OMP_THREADS_NUM=8 CUDA_VISIBLE_DEVICES=7 python eval_diffusion.py --config "all_light_condition.yml" --resume ckpt/fog/AllLightCondition_ddpm6000000.pth.tar  --test_set 'fog' --image_folder 'final_results/fog/fog_cond_600w/' --sampling_timesteps 25 --grid_r 16  --testing_block 5/6
+#OMP_THREADS_NUM=8 CUDA_VISIBLE_DEVICES=2 python eval_diffusion.py --config "all_light_condition.yml" --resume ckpt/fog/AllLightCondition_ddpm6000000.pth.tar  --test_set 'fog' --image_folder 'final_results/fog/fog_cond_600w/' --sampling_timesteps 25 --grid_r 16  --testing_block 6/6
+
+#OMP_THREADS_NUM=8 CUDA_VISIBLE_DEVICES=0 python eval_diffusion.py --config "all_light_condition.yml" --resume ckpt/snow11k/AllLightCondition_ddpm920000.pth.tar  --test_set 'real_weather' --image_folder 'final_results/real_weather/real_snow_snow11k_cond_92w/' --sampling_timesteps 25 --grid_r 16 
+#OMP_THREADS_NUM=8 CUDA_VISIBLE_DEVICES=1 python eval_diffusion.py --config "all_light_condition.yml" --resume ckpt/snow11k/AllLightCondition_ddpm2000000.pth.tar  --test_set 'real_weather' --image_folder 'final_results/real_weather/real_snow_snow11k_cond_200w/' --sampling_timesteps 25 --grid_r 16 
+#OMP_THREADS_NUM=8 CUDA_VISIBLE_DEVICES=0 python eval_diffusion.py --config "all_light_condition.yml" --resume ckpt/snow11k/AllLightCondition_ddpm3360000.pth.tar  --test_set 'real_weather' --image_folder 'final_results/real_weather/real_snow_snow11k_cond_336w/' --sampling_timesteps 25 --grid_r 16 --testing_block 1/2
+#OMP_THREADS_NUM=8 CUDA_VISIBLE_DEVICES=1 python eval_diffusion.py --config "all_light_condition.yml" --resume ckpt/snow11k/AllLightCondition_ddpm3360000.pth.tar  --test_set 'real_weather' --image_folder 'final_results/real_weather/real_snow_snow11k_cond_336w/' --sampling_timesteps 25 --grid_r 16 --testing_block 2/2
+
+path:
+    lol_v1: ../../data/LOL-v1
+    lol_v2_real: ../../data/LOL-v2/Real_captured
+    lol_v2_syn: ../../data/LOL-v2/Synthetic
+    sdsd_indoor: ../../data/SDSD/indoor_static_np
+    sdsd_outdoor: ../../data/SDSD/outdoor_static_np
+    sid: ../../data/sid_processed
+    smid: ../../data/smid
+    lol_blur: ../../data/LOL-Blur
+    lol_deblur_in_LDR: /home/ysd/cyf20/code/Learning_degradation-main/results/lol_blur
+    lol_deblur_in_MIMO: /home/ysd/cyf20/code/MIMO-UNet-main/results/lol_blur_enhance_test_mini_plus
+    fog: ../../data/CityscapeFog
+    raindrop: ../../data/Raindrop
+    rain: ../../data/DDN
+    snow: ../../data/CityscapeSnow
+    haze: ../../data/Haze4K
+    snow11k: ../../data/snow11k
+    real_weather: ../../data/real_weather/real_snow
+
+
+test_dir:
+    sdsd_indoor: pair11,pair21,pair1,pair19,pair4,pair9,pair11_2,pair21_2,pair1_2,pair19_2,pair4_2,pair9_2
+    sdsd_outdoor: MVI_0898,MVI_0928,MVI_0906,MVI_0975,MVI_1001,MVI_0997,MVI_1003,MVI_1026,MVI_1030,MVI_1032,MVI_0898_2,MVI_0928_2,MVI_0906_2,MVI_0975_2,MVI_1001_2,MVI_0997_2,MVI_1003_2,MVI_1026_2,MVI_1030_2,MVI_1032_2
+    smid: configs/test_list.txt
+
+data:
+    dataset: "AllLightCondition"
+    image_size: 64
+    channels: 3
+    num_workers: 32
+    data_dir: 
+    data_name: raindrop   # lol_v1,lol_v2_real,lol_v2_syn,sdsd_indoor,sdsd_outdoor # ,sid,smid
+    conditional: True
+    ckpt_path: 
+    tb_path:
+    testing_block: 
+
+model:
+    in_channels: 3
+    out_ch: 3
+    ch: 128
+    ch_mult: [1, 2, 3, 4]
+    num_res_blocks: 2
+    attn_resolutions: [16, ]
+    dropout: 0.0
+    ema_rate: 0.999
+    ema: True
+    resamp_with_conv: True
+
+diffusion:
+    beta_schedule: linear
+    beta_start: 0.0001
+    beta_end: 0.02
+    num_diffusion_timesteps: 1000
+
+training:
+    patch_n: 4
+    batch_size: 12 #snow11k 14
+    n_epochs: 1000000 #100000
+    n_iters: 400000000 #4000000
+    snapshot_freq: 100000 #500000000 #20000
+    validation_freq: 100000 #50000000 #50000
+
+sampling:
+    batch_size: 4
+    last_only: True
+
+testing:
+    batch_size: 4
+
+optim:
+    weight_decay: 0.000
+    optimizer: "Adam"
+    lr: 0.00002
+    amsgrad: False
+    eps: 0.00000001

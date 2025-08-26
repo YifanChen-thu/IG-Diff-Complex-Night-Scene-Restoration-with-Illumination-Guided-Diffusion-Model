@@ -1,0 +1,13 @@
+.idea/
+*__pycache__*
+._.DS_Store
+*.py[cod]
+*.xml
+venv/
+results/
+ckpt/
+.history/
+test_results/
+tb
+runs
+final_results/

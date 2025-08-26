@@ -1,0 +1,239 @@
+import os
+from os import listdir
+from os.path import isfile
+import torch
+import numpy as np
+import torchvision
+import torch.utils.data
+import PIL
+import re
+import random
+import datasets.util as util
+
+class sid:
+    def __init__(self, config):
+        self.config = config
+        self.transforms = torchvision.transforms.Compose([torchvision.transforms.ToTensor()])
+
+    def get_loaders(self, parse_patches=True, validation='sid'):
+        if validation == 'raindrop':
+            print("=> evaluating raindrop test set...")
+            path = os.path.join(self.config.data.data_dir, 'data', 'raindrop', 'test')
+            filename = 'raindroptesta.txt'
+        elif validation == 'rainfog':
+            print("=> evaluating outdoor rain-fog test set...")
+            path = os.path.join(self.config.data.data_dir, 'data', 'outdoor-rain')
+            filename = 'test1.txt'
+        #lol
+        elif validation == 'lol':
+            print("=> evaluating outdoor lol test set...")
+            path = os.path.join(self.config.data.data_dir, 'eval15')
+
+        elif validation == 'lolv2_real':
+            print("=> evaluating outdoor lolv2_real test set...")
+            path = os.path.join(self.config.data.data_dir, 'Test')
+
+        elif validation == 'lolv2_syn':
+            print("=> evaluating outdoor lolv2_syn test set...")
+            path = os.path.join(self.config.data.data_dir, 'Test')
+
+        elif validation == 'sdsd_indoor':
+            print("=> evaluating outdoor sdsd_indoor test set...")
+            path = os.path.join(self.config.data.data_dir, 'GT')
+        elif validation == 'sdsd_outdoor':
+            print("=> evaluating outdoor sdsd_outdoor test set...")
+            path = os.path.join(self.config.data.data_dir, 'GT')
+
+        elif validation == 'sid':
+            path = self.config.data.data_dir
+
+        else:   # snow
+            print("=> evaluating snowtest100K-L...")
+            path = os.path.join(self.config.data.data_dir, 'data', 'snow100k')
+            filename = 'snowtest100k_L.txt'
+
+        # train_dataset = LOLDataset(os.path.join(self.config.data.data_dir,'our485'),
+        #                                   n=self.config.training.patch_n,
+        #                                   patch_size=self.config.data.image_size,
+        #                                   transforms=self.transforms,
+        #                                 #   filelist='allweather.txt',
+        #                                   parse_patches=parse_patches)
+
+        train_dataset = LOLDataset(self.config.data.data_dir,
+                                       n=self.config.training.patch_n,
+                                       patch_size=self.config.data.image_size,
+                                       transforms=self.transforms,
+                                       #   filelist='allweather.txt',
+                                       parse_patches=parse_patches,test=False)
+
+        val_dataset = LOLDataset(path, n=self.config.training.patch_n,
+                                        patch_size=self.config.data.image_size,
+                                        transforms=self.transforms,
+                                        # filelist=filename,
+                                        parse_patches=parse_patches,test=True)
+
+        if not parse_patches:
+            self.config.training.batch_size = 1
+            self.config.sampling.batch_size = 1
+
+        train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=self.config.training.batch_size,
+                                                   shuffle=True, num_workers=self.config.data.num_workers,
+                                                   pin_memory=True)
+        val_loader = torch.utils.data.DataLoader(val_dataset, batch_size=self.config.sampling.batch_size,
+                                                 shuffle=False, num_workers=self.config.data.num_workers,
+                                                 pin_memory=True)
+
+        return train_loader, val_loader
+
+
+class LOLDataset(torch.utils.data.Dataset):
+    def __init__(self, dir, patch_size, n, transforms, filelist=None, parse_patches=True,test=False):
+        super().__init__()
+        self.test =test
+        self.dir = dir    
+        
+
+        # train_list = os.path.join(dir, filelist)
+        # with open(train_list) as f:
+        #     contents = f.readlines()
+        #     input_names = [i.strip() for i in contents]
+        #     gt_names = [i.strip().replace('input', 'gt') for i in input_names]
+
+
+        subfolders_LQ_origin =  util.glob_file_list(os.path.join(dir,'short_sid2'))
+        subfolders_GT_origin =  util.glob_file_list(os.path.join(dir,'long_sid2'))
+
+        subfolders_LQ = []
+        subfolders_GT = []
+
+        if test:
+            for mm in range(len(subfolders_LQ_origin)):
+                name = os.path.basename(subfolders_LQ_origin[mm])
+                if '1' in name[0]:
+                    subfolders_LQ.append(subfolders_LQ_origin[mm])
+                    subfolders_GT.append(subfolders_GT_origin[mm])
+        else:
+            for mm in range(len(subfolders_LQ_origin)):
+                name = os.path.basename(subfolders_LQ_origin[mm])
+                if '0' in name[0] or '2' in name[0]:
+                    subfolders_LQ.append(subfolders_LQ_origin[mm])
+                    subfolders_GT.append(subfolders_GT_origin[mm])
+
+        self.input_names = []
+        self.gt_names = []
+
+
+        for subfolder_input,subfolder_gt in zip(subfolders_LQ,subfolders_GT):
+            subfolder_name = os.path.basename(subfolder_gt)
+            img_paths_input = util.glob_file_list(subfolder_input)
+            img_paths_gt = util.glob_file_list(subfolder_gt)
+
+            #
+            lenth_input = len(img_paths_input)
+            img_paths_gt.extend(img_paths_gt*(lenth_input-1))
+
+            assert len(img_paths_input) == len(img_paths_gt)
+            self.input_paths = img_paths_input
+            self.gt_paths = img_paths_gt
+
+            self.input_names += self.input_paths
+            self.gt_names += self.gt_paths
+    
+        
+
+
+
+
+
+
+        
+
+        self.patch_size = patch_size
+        self.transforms = transforms
+        self.n = n
+        self.parse_patches = parse_patches
+
+    @staticmethod
+    def get_params(img, output_size, n):
+        w, h = img.size
+        th, tw = output_size
+        if w == tw and h == th:
+            return 0, 0, h, w
+
+        i_list = [random.randint(0, h - th) for _ in range(n)]
+        j_list = [random.randint(0, w - tw) for _ in range(n)]
+        return i_list, j_list, th, tw
+
+    @staticmethod
+    def n_random_crops(img, x, y, h, w):
+        crops = []
+        for i in range(len(x)):
+            new_crop = img.crop((y[i], x[i], y[i] + w, x[i] + h))
+            crops.append(new_crop)
+        return tuple(crops)
+
+    def get_images(self, index):
+        input_name = self.input_names[index]
+        
+        input_name_path = self.input_names[index]
+        gt_name_path = self.gt_names[index]
+
+        input_img = util.read_img3(input_name_path)
+        gt_img = util.read_img3(gt_name_path)
+
+        img_id_1 = re.split('/',input_name)[-2]
+        img_id_2 = re.split('/',input_name)[-1]
+        img_id_2_1 = re.split('.npy',img_id_2)[0]
+        # print(img_id_2_1)
+        img_id = img_id_1 + '_' + img_id_2_1
+        # print("img_id_1:{},img_id_2:{},img_id_2_1:{},img_id:{}".format(img_id_1,img_id_2,img_id_2_1,img_id))
+
+
+        # input_name = self.input_names[index]
+        # gt_name = self.gt_names[index]
+        # img_id = re.split('/', input_name)[-1][:-4]
+        # # input_img = PIL.Image.open(os.path.join(self.dir,input_name)) if self.dir else PIL.Image.open(input_name)
+        # # input_img = PIL.Image.open(os.path.join(self.dir, 'low',input_name)) if self.dir else PIL.Image.open(input_name)
+        # input_img = PIL.Image.open(os.path.join(self.dir, 'short_sid2',input_name)) if self.dir else PIL.Image.open(input_name)
+
+        # try:
+        #     # gt_img = PIL.Image.open(os.path.join(self.dir,gt_name)) if self.dir else PIL.Image.open(gt_name)
+        #     # gt_img = PIL.Image.open(os.path.join(self.dir, 'high',gt_name)) if self.dir else PIL.Image.open(gt_name)
+        #     gt_img = PIL.Image.open(os.path.join(self.dir, 'long_sid2',gt_name)) if self.dir else PIL.Image.open(gt_name)
+
+        # except:
+        #     # gt_img = PIL.Image.open(os.path.join(self.dir,gt_name)).convert('RGB') if self.dir else PIL.Image.open(gt_name).convert('RGB')
+
+        #     # gt_img = PIL.Image.open(os.path.join(self.dir, 'high',gt_name)).convert('RGB') if self.dir else PIL.Image.open(gt_name).convert('RGB')
+        #     gt_img = PIL.Image.open(os.path.join(self.dir, 'long_sid2',gt_name)).convert('RGB') if self.dir else PIL.Image.open(gt_name).convert('RGB')
+
+
+        if self.parse_patches:
+            i, j, h, w = self.get_params(input_img, (self.patch_size, self.patch_size), self.n)
+            input_img = self.n_random_crops(input_img, i, j, h, w)
+            gt_img = self.n_random_crops(gt_img, i, j, h, w)
+            outputs = [torch.cat([self.transforms(input_img[i]), self.transforms(gt_img[i])], dim=0)
+                       for i in range(self.n)]
+            return torch.stack(outputs, dim=0), img_id
+        else:
+            # Resizing images to multiples of 16 for whole-image restoration
+            wd_new, ht_new = input_img.size
+            if ht_new > wd_new and ht_new > 1024:
+                wd_new = int(np.ceil(wd_new * 1024 / ht_new))
+                ht_new = 1024
+            elif ht_new <= wd_new and wd_new > 1024:
+                ht_new = int(np.ceil(ht_new * 1024 / wd_new))
+                wd_new = 1024
+            wd_new = int(16 * np.ceil(wd_new / 16.0))
+            ht_new = int(16 * np.ceil(ht_new / 16.0))
+            input_img = input_img.resize((wd_new, ht_new), PIL.Image.ANTIALIAS)
+            gt_img = gt_img.resize((wd_new, ht_new), PIL.Image.ANTIALIAS)
+
+            return torch.cat([self.transforms(input_img), self.transforms(gt_img)], dim=0), img_id
+
+    def __getitem__(self, index):
+        res = self.get_images(index)
+        return res
+
+    def __len__(self):
+        return len(self.input_names)

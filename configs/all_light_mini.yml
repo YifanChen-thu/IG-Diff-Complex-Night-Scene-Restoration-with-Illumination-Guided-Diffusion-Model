@@ -1,0 +1,75 @@
+# CUDA_VISIBLE_DEVICES=6,7 python train_diffusion.py --config "all_light_mini.yml" --training_name=lol_v1_lol_v2_sdsd_baseline_mini
+
+# CUDA_VISIBLE_DEVICES=0,1 python train_diffusion.py --config "all_light_mini.yml" --training_name=lol_v1_lol_v2_sdsd_baseline_mini
+
+# CUDA_VISIBLE_DEVICES=4 python eval_diffusion.py --config "all_light_mini.yml" \
+#  --resume '/apdcephfs_cq2/share_1290939/feiiyin/Lowlevel/low-light-diffusion/ckpt/lol_v1_lol_v2_sdsd_128_baseline/AllLight_ddpm1000000.pth.tar' \
+#  --test_set 'lol_v1' \
+#  --image_folder 'test_results/lol_v1/lol_v1_lol_v2_sdsd_128_baseline_100w/' --sampling_timesteps 25 --grid_r 32
+
+
+
+path:
+    lol_v1: ../../data/LOL-v1
+    lol_v2_real: ../../data/LOL-v2/Real_captured
+    lol_v2_syn: ../../data/LOL-v2/Synthetic
+    sdsd_indoor: ../../data/SDSD/indoor_static_np
+    sdsd_outdoor: ../../data/SDSD/outdoor_static_np
+    sid: ../../data/sid_processed
+    smid: ../../data/smid
+
+test_dir:
+    sdsd_indoor: pair11,pair21,pair1,pair19,pair4,pair9
+    sdsd_outdoor: MVI_0898,MVI_0928,MVI_0906,MVI_0975,MVI_1001,MVI_0997,MVI_1003,MVI_1026,MVI_1030,MVI_1032
+    smid: configs/test_list.txt
+
+data:
+    dataset: "AllLight"
+    image_size: 64
+    channels: 3
+    num_workers: 32
+    data_dir: 
+    data_name: lol_v1,lol_v2_real,lol_v2_syn,sdsd_indoor,sdsd_outdoor # ,sid,smid
+    conditional: True
+    ckpt_path: 
+    tb_path:
+
+model:
+    in_channels: 3
+    out_ch: 3
+    ch: 64
+    ch_mult: [1, 2, 3, 4]
+    num_res_blocks: 2
+    attn_resolutions: [16, ]
+    dropout: 0.0
+    ema_rate: 0.999
+    ema: True
+    resamp_with_conv: True
+
+diffusion:
+    beta_schedule: linear
+    beta_start: 0.0001
+    beta_end: 0.02
+    num_diffusion_timesteps: 1000
+
+training:
+    patch_n: 4
+    batch_size: 64
+    n_epochs: 100000
+    n_iters: 4000000
+    snapshot_freq: 20000
+    validation_freq: 20000
+
+sampling:
+    batch_size: 4
+    last_only: True
+
+testing:
+    batch_size: 4
+
+optim:
+    weight_decay: 0.000
+    optimizer: "Adam"
+    lr: 0.00002
+    amsgrad: False
+    eps: 0.00000001
